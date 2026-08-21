@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Smart Resume Screener</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Hero Header -->
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="hero-badge">AI-Powered</div>
+      <h1>Smart Resume Screener</h1>
+      <p class="hero-sub">Upload resumes, paste a job description, and let AI rank your candidates instantly.</p>
+    </div>
+  </header>
+
+  <main class="main">
+
+    <!-- How it works -->
+    <div class="how-it-works">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-label">Upload PDF / TXT / DOCX Resumes &amp; Job Description</div>
+      </div>
+      <div class="step-arrow">→</div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-label">AI Extracts Skills, Experience &amp; Education</div>
+      </div>
+      <div class="step-arrow">→</div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-label">LLM Computes Match Score 1–10</div>
+      </div>
+      <div class="step-arrow">→</div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-label">Shortlisted Candidates with Justification</div>
+      </div>
+    </div>
+
+    <!-- Upload Panel -->
+    <section class="panel upload-panel">
+      <div class="panel-header">
+        <span class="panel-icon">📋</span>
+        <div>
+          <h2>New Screening</h2>
+          <p class="panel-desc">Paste a job description and upload candidate resumes</p>
+        </div>
+      </div>
+
+      <form id="uploadForm">
+        <div class="field-group">
+          <label class="field-label">Job Description</label>
+          <textarea
+            id="jobDesc"
+            rows="5"
+            placeholder="Paste the full job description here — requirements, responsibilities, skills needed..."
+            required
+          ></textarea>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Resume Files</label>
+          <div class="drop-zone" id="dropZone">
+            <div class="drop-icon">📁</div>
+            <div class="drop-text">Drag & drop resumes here</div>
+            <div class="drop-sub">or <span class="drop-link" id="browseLink">browse files</span></div>
+            <div class="drop-formats">PDF · TXT · DOCX · Multiple files supported</div>
+            <input type="file" id="fileInput" accept=".pdf,.txt,.docx" multiple required />
+          </div>
+          <div id="fileList" class="file-list hidden"></div>
+        </div>
+
+        <p class="error hidden" id="errorMsg"></p>
+
+        <button type="submit" id="submitBtn" class="submit-btn">
+          <span class="btn-icon">✨</span>
+          <span id="btnText">Screen Resumes</span>
+        </button>
+      </form>
+    </section>
+
+    <!-- Loading -->
+    <div id="loadingMsg" class="loading-card hidden">
+      <div class="spinner"></div>
+      <div>
+        <div class="loading-title">Analyzing Resumes...</div>
+        <div class="loading-sub">AI is parsing skills, experience and computing match scores</div>
+      </div>
+    </div>
+
+    <!-- Results -->
+    <section id="resultsSection" class="hidden">
+
+      <div class="results-toolbar">
+        <div class="results-meta">
+          <h2 id="resultsTitle"></h2>
+          <div id="statsRow" class="stats-row"></div>
+        </div>
+        <div class="toolbar-controls">
+          <div class="search-wrap">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="searchInput" placeholder="Search name or skill..." />
+          </div>
+          <select id="sortSelect">
+            <option value="score">↓ Score</option>
+            <option value="name">A–Z Name</option>
+            <option value="date">Latest</option>
+          </select>
+          <button class="clear-btn" id="clearAllBtn">🗑 Clear All</button>
+        </div>
+      </div>
+
+      <div id="emptyState" class="empty-state hidden">
+        <div class="empty-icon">🔎</div>
+        <div>No candidates match your search.</div>
+      </div>
+
+      <div class="candidates" id="candidateList"></div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    Built with Node.js · Express · Gemini AI · SQLite
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

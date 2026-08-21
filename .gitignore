@@ -1,0 +1,5 @@
+node_modules/
+backend/resumes.db
+backend/.env
+*.pyc
+__pycache__/
