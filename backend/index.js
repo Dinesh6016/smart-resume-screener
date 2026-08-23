@@ -1,5 +1,6 @@
 const path = require("path");
-require("dotenv").config();
+require("dotenv").config({ path: path.join(__dirname, ".env") });
+require("dotenv").config({ path: path.join(__dirname, "../frontend/.env") });
 const express = require("express");
 const cors = require("cors");
 const multer = require("multer");
@@ -13,7 +14,16 @@ const upload = multer({ storage: multer.memoryStorage() });
 
 app.use(cors());
 app.use(express.json());
+
+// Dynamic env config endpoint for frontend
+app.get("/config.js", (req, res) => {
+  res.type("application/javascript");
+  const apiUrl = process.env.backend_API || process.env.BACKEND_API || "";
+  res.send(`window.ENV = ${JSON.stringify({ API_URL: apiUrl })};`);
+});
+
 app.use(express.static(path.join(__dirname, "../frontend")));
+
 
 async function extractText(file) {
   if (file.originalname.toLowerCase().endsWith(".pdf")) {
