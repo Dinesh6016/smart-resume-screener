@@ -1,14 +1,7 @@
 
-function getApiBase() {
-  if (window.ENV?.API_URL) return window.ENV.API_URL;
-  // Fallback for VS Code Live Server (port 5500) or other static dev servers
-  if (window.location.port && window.location.port !== "3000") {
-    return "http://localhost:3000";
-  }
-  return "";
-}
+const API = import.meta.env?.VITE_BACKEND_API || "";
 
-const API = getApiBase();
+
 
 
 

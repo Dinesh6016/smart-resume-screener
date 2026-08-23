@@ -6,12 +6,12 @@ Intelligently parse resumes, extract structured data, and match candidates to jo
 
 ```
 ┌──────────────────────┐        ┌──────────────────────────────────────┐
-│  Frontend            │──────▶ │  Node.js + Express Backend           │
+│  Frontend (Vite)     │──────▶ │  Node.js + Express Backend           │
 │  HTML / CSS / JS     │◀────── │  /upload  /candidates  /candidates/:id│
 └──────────────────────┘        └────────────┬─────────────────────────┘
                                              │
                                  ┌───────────▼──────────────┐
-                                 │  Google Gemini 1.5 Flash │
+                                 │  Google Gemini 3.6 Flash │
                                  │  - Structured extraction │
                                  │  - Semantic match scoring│
                                  └───────────┬──────────────┘
@@ -74,20 +74,40 @@ Return ONLY valid JSON with exactly these keys:
 - Node.js 18+
 - A Google Gemini API key — get one free at https://aistudio.google.com/app/apikey
 
-### Backend
+### Backend Setup
 ```bash
 cd backend
 npm install
 
-# Create .env file
-echo "GEMINI_API_KEY=your_key_here" > .env
+# Create backend .env file
+echo "GEMINI_API_KEY=your_gemini_api_key_here" > .env
 
-node index.js
+# Run Backend
+npm run dev     # (or node index.js)
 # Server starts at http://localhost:3000
 ```
 
-### Frontend
-Open **http://localhost:3000** in your browser (served statically by the backend).
+### Frontend Setup
+```bash
+cd frontend
+npm install
+
+# Create frontend .env file
+echo "VITE_BACKEND_API=https://smart-resume-screener-7jg0.onrender.com" > .env
+
+# Run Development Server
+npm run dev
+
+# Build for Production
+npm run build
+```
+
+## Environment Variables
+
+| Variable | Scope | File | Description |
+|----------|-------|------|-------------|
+| `GEMINI_API_KEY` | Backend | `backend/.env` | Your Google Gemini API key |
+| `VITE_BACKEND_API` | Frontend | `frontend/.env` | Deployed backend URL (e.g. `https://smart-resume-screener-7jg0.onrender.com`) |
 
 ## API Endpoints
 
@@ -122,7 +142,7 @@ CREATE TABLE candidates (
 - Upload multiple PDF, TXT, or DOCX resumes at once
 - Drag & drop file upload with file preview
 - Paste any job description
-- Gemini AI extracts: skills, experience, education
+- Gemini AI (gemini-3.6-flash) extracts: skills, experience, education
 - Gemini AI scores each candidate 1–10 with:
   - Written justification
   - Matched & missing skills
@@ -142,13 +162,16 @@ CREATE TABLE candidates (
 SMARTRESUMESCREENER/
 ├── backend/
 │   ├── index.js       # Express server, routes, file parsing
-│   ├── llm.js         # Gemini AI integration & prompts
+│   ├── llm.js         # Gemini AI integration (gemini-3.6-flash)
 │   ├── db.js          # SQLite schema & migrations
 │   ├── package.json
 │   └── .env           # GEMINI_API_KEY (not committed)
 ├── frontend/
-│   ├── index.html     # App shell
-│   ├── app.js         # UI logic, fetch calls, rendering
-│   └── style.css      # Styling
+│   ├── index.html     # App shell (Vite module entry)
+│   ├── app.js         # UI logic, fetch calls (reads VITE_BACKEND_API)
+│   ├── style.css      # Styling
+│   ├── package.json   # Frontend dependencies (Vite)
+│   └── .env           # VITE_BACKEND_API (not committed)
+├── .gitignore         # Excludes .env, node_modules, and .db files
 └── README.md
 ```
